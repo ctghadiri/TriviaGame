@@ -111,8 +111,8 @@ $(document).ready(function(){
             else{
                 clearBoard();
                 displayCorrect();
-                round++;
                 incorrect++;
+                roundCounter();
                 setTimeout(playRound, 4000);
             }
         }, 1000)
@@ -140,22 +140,17 @@ $(document).ready(function(){
         if(userAnswer === questions[round].Answer){
             clearBoard();
             displayCorrect();
-            round++;
             correct++;
+            roundCounter();
             setTimeout(playRound, 4000);
         }
         else if(userAnswer !== questions[round].Answer){
             clearBoard();
             displayCorrect();
-            round++;
             incorrect++;
+            roundCounter();
             setTimeout(playRound, 4000);
             
-        }
-        else if(round === 6){
-            clearBoard();
-            end();
-
         }
     }
     
@@ -163,7 +158,12 @@ $(document).ready(function(){
     function displayCorrect(){
         board.append($("<img>").attr("src", "https://cdn.shopify.com/s/files/1/0489/2545/products/ohhappydayconfetti_4468_61fb3a23-021a-4cc4-b2a4-514d71b1209a_1024x1024.jpg?v=1498626480"))
     }
-    
+    function roundCounter(){
+        round++;
+        if(round === 5){
+            end();
+        };
+    }
     
     function clearBoard(){
         board.empty();
