@@ -53,74 +53,17 @@
 var round = 0;
 var correct = 0;
 var incorrect = 0;
-var interval;
 var timerRunning;
 var board = $("#board");
-var time= 20
-    $(document).ready(function(){
-        $("#start").on("click", playGame);
-    });
-function playGame(){
-    board.on("click", "button", evaluateChoice)
-    playRound()
-}
-function playRound(){
-clearBoard();
-displayQuestion(questions[round].question);
-displayChoices(questions[round].choices);
-
-}
-function displayQuestion(question){
-var questionBox = $("<div>");
-var questionStem = $("<p>").text(question);
-questionBox.append(questionStem);
-board.append(questionBox);
-}
-
-function displayChoices(choices){
-    var choiceBox = $("<div>");
-    for(var i = 0; i < 4; i++){
-        var choiceButton = $("<button>").text(choices[i]).attr("choice", choices[i]);
-        choiceBox.append(choiceButton);
-    }
-    board.append(choiceBox);
-}
-function evaluateChoice(){
-    var userAnswer = $(this).attr("choice");
-    if(userAnswer === questions[round].Answer){
-        clearBoard();
-        displayCorrect();
-        setTimeout(playRound, 4000)
-        round++;
-        correct++;
-    }
-    else if(userAnswer !== question[round].Answer){
-        clearBoard();
-        displayCorrect();
-        setTimeout(playRound, 4000)
-        round++;
-        incorrect++;
-    }
-}
-
-
-function displayCorrect(){
-    board.append($("<img>").attr("src", "https://cdn.shopify.com/s/files/1/0489/2545/products/ohhappydayconfetti_4468_61fb3a23-021a-4cc4-b2a4-514d71b1209a_1024x1024.jpg?v=1498626480"))
-}
-
-
-function clearBoard(){
-board.empty();
-};
-
-
+var time = 20;
+var intervalId;
 var questions = [
     {
         question: " whats the capital of nevada?",
         choices: [1,2,3,4],
         Answer: "3",
         img: ""
-
+        
     },
     {
         question: "Q2",
@@ -148,3 +91,91 @@ var questions = [
     }
 ]
 
+
+$(document).ready(function(){
+    $("#start").on("click", playGame);
+    board.on("click", "button", evaluateChoice)
+    function playGame(){
+        playRound()
+    }
+    function playRound(){
+        clearBoard();
+        displayQuestion(questions[round].question);
+        displayChoices(questions[round].choices);
+        time= 20;
+        intervalId = setInterval(function(){
+            if(time > 0){
+            time--;
+            $("#timer").text("You have " + time + " seconds left!")
+            }
+            else{
+                clearBoard();
+                displayCorrect();
+                round++;
+                incorrect++;
+                setTimeout(playRound, 4000);
+            }
+        }, 1000)
+
+        
+    }
+    function displayQuestion(question){
+        var questionBox = $("<div>");
+        var questionStem = $("<p>").text(question);
+        questionBox.append(questionStem);
+        board.append(questionBox);
+    }
+    
+    function displayChoices(choices){
+        var choiceBox = $("<div>");
+        for(var i = 0; i < 4; i++){
+            var choiceButton = $("<button>").text(choices[i]).attr("choice", choices[i]);
+            // maybe add a class to the buttons for styling
+            choiceBox.append(choiceButton);
+        }
+        board.append(choiceBox);
+    }
+    function evaluateChoice(){
+        var userAnswer = $(this).attr("choice");
+        if(userAnswer === questions[round].Answer){
+            clearBoard();
+            displayCorrect();
+            round++;
+            correct++;
+            setTimeout(playRound, 4000);
+        }
+        else if(userAnswer !== questions[round].Answer){
+            clearBoard();
+            displayCorrect();
+            round++;
+            incorrect++;
+            setTimeout(playRound, 4000);
+            
+        }
+        else if(round === 6){
+            clearBoard();
+            end();
+
+        }
+    }
+    
+    
+    function displayCorrect(){
+        board.append($("<img>").attr("src", "https://cdn.shopify.com/s/files/1/0489/2545/products/ohhappydayconfetti_4468_61fb3a23-021a-4cc4-b2a4-514d71b1209a_1024x1024.jpg?v=1498626480"))
+    }
+    
+    
+    function clearBoard(){
+        board.empty();
+        clearInterval(intervalId);
+    };
+    
+    function end(){
+        board.text("You answered " + correct + " questions correctly & " + incorrect +" incorrectly.")
+        $("#start").append("<button>");
+        $("#start").on("click", playGame);
+    }
+    
+    
+});
+    
