@@ -9,11 +9,14 @@
 
 
 // On the final screen, show the number of correct answers, incorrect answers, and an option to restart the game (without reloading the page).
+
+// -------------------------------------------
+
 // start button to begin
 // Timer starts
-    // Questions appear
+    // questions appear
     // Choices
-// Answer Question
+// Answer question
     // Correct 
         // No alerts
         // Notify correct answer
@@ -36,47 +39,112 @@
 // variables
     // correct
     // 
-// timer ---- code drills
+    // timer ---- code drills
     // 30 sec interval
     // clearing interval
     // set timeout
-
-
-
-
-// create array of objects
+    
+    
+    
+    
+    // create array of objects
     // objects contain questions, 4 choices array, correct answer, image
-// set interval time 
-var Qs = [
+    // set interval time 
+var round = 0;
+var correct = 0;
+var incorrect = 0;
+var interval;
+var timerRunning;
+var board = $("#board");
+var time= 20
+    $(document).ready(function(){
+        $("#start").on("click", playGame);
+    });
+function playGame(){
+    board.on("click", "button", evaluateChoice)
+    playRound()
+}
+function playRound(){
+clearBoard();
+displayQuestion(questions[round].question);
+displayChoices(questions[round].choices);
+
+}
+function displayQuestion(question){
+var questionBox = $("<div>");
+var questionStem = $("<p>").text(question);
+questionBox.append(questionStem);
+board.append(questionBox);
+}
+
+function displayChoices(choices){
+    var choiceBox = $("<div>");
+    for(var i = 0; i < 4; i++){
+        var choiceButton = $("<button>").text(choices[i]).attr("choice", choices[i]);
+        choiceBox.append(choiceButton);
+    }
+    board.append(choiceBox);
+}
+function evaluateChoice(){
+    var userAnswer = $(this).attr("choice");
+    if(userAnswer === questions[round].Answer){
+        clearBoard();
+        displayCorrect();
+        setTimeout(playRound, 4000)
+        round++;
+        correct++;
+    }
+    else if(userAnswer !== question[round].Answer){
+        clearBoard();
+        displayCorrect();
+        setTimeout(playRound, 4000)
+        round++;
+        incorrect++;
+    }
+}
+
+
+function displayCorrect(){
+    board.append($("<img>").attr("src", "https://cdn.shopify.com/s/files/1/0489/2545/products/ohhappydayconfetti_4468_61fb3a23-021a-4cc4-b2a4-514d71b1209a_1024x1024.jpg?v=1498626480"))
+}
+
+
+function clearBoard(){
+board.empty();
+};
+
+
+var questions = [
     {
-        Question: Q1,
-        Choices: [1,2,3,4],
-        Answer: 3,
-        img: img,
+        question: " whats the capital of nevada?",
+        choices: [1,2,3,4],
+        Answer: "3",
+        img: ""
 
     },
     {
-        Question: Q2,
-        Choices: [1,2,3,4],
-        Answer: 3,
-        img: img,
+        question: "Q2",
+        choices: [1,2,3,4],
+        Answer: "3",
+        img: ""
     },
     {
-        Question: Q3,
-        Choices: [1,2,3,4],
-        Answer: 3,
-        img: img,
+        question: "Q3",
+        choices: [1,2,3,4],
+        Answer: "3",
+        img: ""
     },
     {
-        Question: Q4,
-        Choices: [1,2,3,4],
-        Answer: 3,
-        img: img,
+        question: "Q4",
+        choices: [1,2,3,4],
+        Answer: "3",
+        img: ""
     },
     {
-        Question: Q5,
-        Choices: [1,2,3,4],
-        Answer: 3,
-        img: img,
+        question: "Q5",
+        choices: [1,2,3,4],
+        Answer: "3",
+        img: ""
     }
 ]
+
