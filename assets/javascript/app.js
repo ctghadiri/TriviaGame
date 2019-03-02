@@ -96,7 +96,11 @@ $(document).ready(function(){
     $("#start").on("click", playGame);
     board.on("click", "button", evaluateChoice)
     function playGame(){
-        playRound()
+        round = 0;
+        correct = 0;
+        incorrect = 0;
+        time = 20;
+        playRound();
     }
     function playRound(){
         clearBoard();
@@ -171,9 +175,12 @@ $(document).ready(function(){
     };
     
     function end(){
+        clearBoard();
         board.text("You answered " + correct + " questions correctly & " + incorrect +" incorrectly.")
-        $("#start").append("<button>");
-        $("#start").on("click", playGame);
+        var restart = $("<button>");
+        board.append(restart)
+        restart.html("Restart")
+        restart.on("click", playGame)
     }
     
     
